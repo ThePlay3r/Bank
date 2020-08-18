@@ -1,0 +1,341 @@
+# Big thanks and love for using my plugins! ^^
+
+#|--------------------------------------------------------------------------------------------------------------------|#
+# Plugin: Bank
+# Author: https://www.mc-market.org/members/89497/ | https://www.spigotmc.org/members/radekjenejlepsi.227786/
+# Description: Plugin for in-game Bank
+# Dependencies:
+#   -> PLJRApi
+#   -> MySQL
+#   -> Vault (https://www.spigotmc.org/resources/vault.34315/)
+#   -> PlaceholderAPI<Optional> (https://www.spigotmc.org/resources/placeholderapi.6245/)
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+###############\
+# MySQL Setup ##############################################################################################\
+############### This is the most important part, as the plugin can not work without proper MySQL Database. # \
+              ##############################################################################################  \
+mysql:
+  enabled: false #-> Should we use this database instead of the one configured in PLJRApi config.yml?
+  host: "127.0.0.1"
+  port: "3306"
+  database: "db"
+  username: "root"
+  password: ""
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+##################\
+# Settings Setup #############################################################\
+################## Here, you can enable or disable functions of this plugin. # \
+                 #############################################################  \
+settings:
+  banks-menu-change-current: true #-> Should we change the current tier of bank to player's head?
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+###############\
+# Banks Setup ###################################\
+############### Here, you can setup bank tiers. # \
+              ###################################  \
+banks:
+  default:
+    max: 100000
+    cost: 0
+    perm: ""
+  tier-2:
+    max: 200000
+    cost: 50000
+    perm: "bank.tier.2"
+  tier-3:
+    max: 300000
+    cost: 100000
+    perm: "bank.tier.3"
+  tier-4:
+    max: 400000
+    cost: 200000
+    perm: "bank.tier.4"
+  tier-5:
+    max: 500000
+    cost: 250000
+    perm: "bank.tier.5"
+
+#|--------------------------------------------------------------------------------------------------------------------|#
+###############\
+# Menus Setup ###########################################################\
+############### Here, you can customize the looks of all in-game menus. # \
+              ###########################################################  \
+main-menu:
+  title: "§b§lBank v${project.version}"
+  background:
+    type: "BLACK_STAINED_GLASS_PANE"
+    name: "§0"
+    amount: 1
+    lore:
+      - "§r"
+  head:
+    head: true
+    head-owner: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDY3ZGNlNDY0NTM0OWU0MWE3ZjM1Nzk3ZTJiOTI3OWUzNWE2NWY1ZTgxYTM0NDk2ODg1ZDI3MjY4ZjM2OTEzOSJ9fX0="
+    amount: 1
+    name: "§a§lBANK"
+    lore:
+      - "§8► §7%amount§8/§7%max"
+      - ""
+      - "§eClick §fto change bank."
+  withdraw:
+    type: "BUCKET"
+    name: "§e§lWITHDRAW"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw money from bank."
+  deposit:
+    type: "WATER_BUCKET"
+    name: "§e§lDEPOSIT"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit money to bank."
+
+deposit-menu:
+  title: "§b§lBank v${project.version} - Deposit"
+  background:
+    type: "BLACK_STAINED_GLASS_PANE"
+    name: "§0"
+    amount: 1
+    lore:
+      - "§r"
+  add-10:
+    type: "LIME_STAINED_GLASS_PANE"
+    name: "§a§lADD §a10"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit §e10$"
+  add-100:
+    type: "LIME_STAINED_GLASS_PANE"
+    name: "§a§lADD §a100"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit §e100$"
+  add-1000:
+    type: "LIME_STAINED_GLASS_PANE"
+    name: "§a§lADD §a1000"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit §e1000$"
+  add-10000:
+    type: "LIME_STAINED_GLASS_PANE"
+    name: "§a§lADD §a10000"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit §e10000$"
+  add-100000:
+    type: "LIME_STAINED_GLASS_PANE"
+    name: "§a§lADD §a100000"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit §e100000"
+  add-1000000:
+    type: "LIME_STAINED_GLASS_PANE"
+    name: "§a§lADD §a1000000"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit §e1000000"
+  add-10000000:
+    type: "LIME_STAINED_GLASS_PANE"
+    name: "§a§lADD §a10000000"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit §e10000000"
+  add-100000000:
+    type: "LIME_STAINED_GLASS_PANE"
+    name: "§a§lADD §a100000000"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit §e100000000"
+  add-all:
+    type: "LIME_STAINED_GLASS"
+    name: "§a§lADD §aALL"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit §eALL §fof your money."
+  add-custom:
+    type: "COMMAND_BLOCK"
+    name: "§a§lADD §aCustom"
+    amount: 1
+    lore:
+      - "§8► §fClick to deposit §eCustom §famount of money."
+
+
+withdraw-menu:
+  title: "§b§lBank v${project.version} - Withdraw"
+  background:
+    type: "BLACK_STAINED_GLASS_PANE"
+    name: "§0"
+    amount: 1
+    lore:
+      - "§r"
+  remove-10:
+    type: "RED_STAINED_GLASS_PANE"
+    name: "§c§lREMOVE §c10"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw §e10$"
+  remove-100:
+    type: "RED_STAINED_GLASS_PANE"
+    name: "§c§lREMOVE §c100"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw §e100$"
+  remove-1000:
+    type: "RED_STAINED_GLASS_PANE"
+    name: "§c§lREMOVE §c1000"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw §e1000$"
+  remove-10000:
+    type: "RED_STAINED_GLASS_PANE"
+    name: "§c§lREMOVE §c10000"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw §e10000$"
+  remove-100000:
+    type: "RED_STAINED_GLASS_PANE"
+    name: "§c§lREMOVE §c100000"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw §e100000"
+  remove-1000000:
+    type: "RED_STAINED_GLASS_PANE"
+    name: "§c§lREMOVE §c1000000"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw §e1000000"
+  remove-10000000:
+    type: "RED_STAINED_GLASS_PANE"
+    name: "§c§lREMOVE §c10000000"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw §e10000000"
+  remove-100000000:
+    type: "RED_STAINED_GLASS_PANE"
+    name: "§c§lREMOVE §c100000000"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw §e100000000"
+  remove-all:
+    type: "RED_STAINED_GLASS"
+    name: "§c§lREMOVE §cALL"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw §eALL §fof your money."
+  remove-custom:
+    type: "COMMAND_BLOCK"
+    name: "§c§lREMOVE §cCustom"
+    amount: 1
+    lore:
+      - "§8► §fClick to withdraw §eCustom §famount of money."
+
+banks-menu:
+  title: "§b§lBank v${project.version} - Bank Type"
+  background:
+    type: "BLACK_STAINED_GLASS_PANE"
+    name: "§0"
+    amount: 1
+    lore:
+      - "§r"
+  type-default:
+    type: "SOUL_SAND"
+    name: "§7§lORDINARY §7Account"
+    amount: 1
+    lore:
+      - "§7Max. Amount §8► §f%max"
+  type-2:
+    type: "DIRT"
+    name: "§f§lCOMMON §fAccount"
+    amount: 1
+    lore:
+      - "§7Max. Amount §8► §f%max"
+      - "§7Cost §8► §f%cost"
+      - "§7Perm §8► §f%perm"
+  type-3:
+    type: "GRASS"
+    name: "§e§lUNCOMMON §eAccount"
+    amount: 1
+    lore:
+      - "§7Max. Amount §8► §f%max"
+      - "§7Cost §8► §f%cost"
+      - "§7Perm §8► §f%perm"
+  type-4:
+    type: "CHEST"
+    name: "§b§lEPIC §bAccount"
+    amount: 1
+    lore:
+      - "§7Max. Amount §8► §f%max"
+      - "§7Cost §8► §f%cost"
+      - "§7Perm §8► §f%perm"
+  type-5:
+    type: "ENDER_CHEST"
+    name: "§d§lLEGENDARY §dAccount"
+    amount: 1
+    lore:
+      - "§7Max. Amount §8► §f%max"
+      - "§7Cost §8► §f%cost"
+      - "§7Perm §8► §f%perm"
+
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+##############\
+# Lang Setup ################################################################\
+############## Here, you can customize messages, send by the plugin itself. # \
+             ################################################################  \
+
+help:
+  - ""
+  - "§a§lBank Help v${project.version}"
+  - ""
+  - "§e/bank §8» §fOpens the main GUI."
+  - "§e/bank help §8» §fDisplays this message."
+  - "§e/bank add <amount> §8» §fDeposits amount to your bank account."
+  - "§e/bank addall §8» §fDeposits all of your current money to your bank account."
+  - "§e/bank remove <amount> §8» §fWithdraws amount from your bank account."
+  - "§e/bank removeall §8» §fWithdraws all of the money in your bank account."
+  - "§e/bank show <player> §8» §fShows information about player."
+
+admin-help:
+  - ""
+  - "§a§lBank Admin-Help v${project.version}"
+  - ""
+  - "§e/abank set <player> <amount> §8» §fSets money of player's bank account. §7(Ignores his Tier)"
+  - "§e/abank add <player> <amount> §8» §fAdds money to player's bank account. §7(Ignores his Tier)"
+  - "§e/abank remove <player> <amount> §8» §fRemoves money from player's bank account."
+
+deposit-message:
+  - ""
+  - "§e§lBANK"
+  - "§8» §fClick on this message to §eadd §fcustom amount of money to your account."
+  - ""
+
+withdraw-message:
+  - ""
+  - "§e§lBANK"
+  - "§8» §fClick on this message to §eremove §fcustom amount of money from your account."
+  - ""
+
+lang:
+  NO_CONSOLE: "§cThis command is for in-game use only!"
+  ADD_SUCCESS: "§aBank §8» §b%money §fhas been deposited to your bank account."
+  ADD_FAILURE_TOO_MUCH: "§aBank §8» §fYou can't add §b%money §fto your account!"
+  ADD_FAILURE_NOT_ENOUGH: "§aBank §8» §fYou don't have enough money to do this!"
+  REMOVE_SUCCESS: "§aBank §8» §fSuccessfully withdrawn §b%money §ffrom your bank account."
+  REMOVE_FAILURE_TOO_MUCH: "§aBank §8» §fYou don't have enough money in your bank account!"
+  SHOW_PLAYER: "§aBank §8» §b%player §fhas $§b%amount §fon his Bank Account."
+  PERM_YES: "§aYes"
+  PERM_NO: "§aNo"
+  BUY_SUCCESS: "§aBank §8» §fYou successfully bought new §bbank account§f!"
+  BUY_FAILURE: "§aBank §8» §fYou don't have enough money to buy this account!"
+  NO_POSITIVE: "§aBank §8» §fThe number must be positive!"
+  ADMIN_SET_SUCCESS: "§aBank §8» §fSuccessfully set bank balance of §b%player §fto §b%money§f."
+  ADMIN_SET_SUCCESS_NOTIFY: "§aBank §8» §fYour bank balance has been set to §b%money §fby §b%player§f."
+  ADMIN_ADD_SUCCESS: "§aBank §8» §fSuccessfully added §b%money §fto bank balance of §b%player§f."
+  ADMIN_ADD_SUCCESS_NOTIFY: "§aBank §8» §b%money §fhas been added to your bank balance by §b%player§f."
+  ADMIN_REMOVE_SUCCESS: "§aBank §8» §fSuccessfully removed §b%money §ffrom bank balance of §b%player§f."
+  ADMIN_REMOVE_FAILURE_TOO_MUCH: "§aBank §8» §b%player §fdoes not have enough money in bank!"
+  ADMIN_REMOVE_SUCCESS_NOTIFY: "§aBank §8» §b%money §fhas been removed from your bank balance by §b%player§f."
+#|--------------------------------------------------------------------------------------------------------------------|#

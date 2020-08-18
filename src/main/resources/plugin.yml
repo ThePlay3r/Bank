@@ -1,0 +1,12 @@
+name: Bank
+version: ${project.version}
+main: me.pljr.bank.Bank
+api-version: 1.13
+authors: [9hx]
+depend: [PLJRApi]
+description: Plugin for in-game Bank
+commands:
+  bank:
+    description: Main command for Banks.
+  abank:
+    description: Admin command for Banks.
