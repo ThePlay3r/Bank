@@ -33,17 +33,18 @@ public final class Bank extends JavaPlugin {
         setupManagers();
         setupDatabase();
         setupListeners();
-        setupComamnds();
+        setupCommands();
+        setupPapi();
     }
 
     private boolean setupPLJRApi(){
         PLJRApi api = (PLJRApi) Bukkit.getServer().getPluginManager().getPlugin("PLJRApi");
         if (api == null){
-            Bukkit.getConsoleSender().sendMessage("§cReactions: PLJRApi not found, disabling plugin!");
+            Bukkit.getConsoleSender().sendMessage("§cBank: PLJRApi not found, disabling plugin!");
             getServer().getPluginManager().disablePlugin(this);
             return false;
         }else{
-            Bukkit.getConsoleSender().sendMessage("§aReactions: Hooked into PLJRApi!");
+            Bukkit.getConsoleSender().sendMessage("§aBank: Hooked into PLJRApi!");
             return true;
         }
     }
@@ -81,9 +82,15 @@ public final class Bank extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BanksMenu(), this);
     }
 
-    private void setupComamnds(){
+    private void setupCommands(){
         getCommand("bank").setExecutor(new BankCommand());
         getCommand("abank").setExecutor(new ABankCommand());
+    }
+
+    private void setupPapi(){
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+            new PapiExpansion(this).register();
+        }
     }
 
     public static Bank getInstance() {

@@ -4,6 +4,7 @@ main: me.pljr.bank.Bank
 api-version: 1.13
 authors: [9hx]
 depend: [PLJRApi]
+softdepend: [PlaceholderAPI]
 description: Plugin for in-game Bank
 commands:
   bank:
