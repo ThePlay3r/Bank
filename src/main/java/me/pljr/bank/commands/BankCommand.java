@@ -18,7 +18,7 @@ public class BankCommand extends CommandUtil implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)){
-            sender.sendMessage(CfgLang.lang.get(Lang.NO_CONSOLE));
+            sendMessage(sender, CfgLang.lang.get(Lang.NO_CONSOLE));
             return false;
         }
         Player player = (Player) sender;
@@ -26,7 +26,7 @@ public class BankCommand extends CommandUtil implements CommandExecutor {
 
         // /bank
         if (args.length == 0){
-            MainMenu.open(player);
+            MainMenu.get(player).open(player);
             return true;
         }
 
@@ -43,10 +43,10 @@ public class BankCommand extends CommandUtil implements CommandExecutor {
                 if (!checkPerm(player, "bank.add") || !checkPerm(player, "bank.addall")) return false;
                 double amount = VaultUtil.getBalance(player);
                 if (!Bank.getPlayerManager().addMoneyAll(player)){
-                    player.sendMessage(CfgLang.lang.get(Lang.ADD_FAILURE_TOO_MUCH).replace("%money", amount+""));
+                    sendMessage(player, CfgLang.lang.get(Lang.ADD_FAILURE_TOO_MUCH).replace("%money", amount+""));
                     return false;
                 }
-                player.sendMessage(CfgLang.lang.get(Lang.ADD_SUCCESS).replace("%money", amount+""));
+                sendMessage(player, CfgLang.lang.get(Lang.ADD_SUCCESS).replace("%money", amount+""));
                 return true;
             }
 
@@ -55,7 +55,7 @@ public class BankCommand extends CommandUtil implements CommandExecutor {
                 if (!checkPerm(player, "bank.remove") || !checkPerm(player, "bank.removeall")) return false;
                 double amount = Bank.getPlayerManager().getCorePlayer(player.getUniqueId()).getAmount();
                 Bank.getPlayerManager().removeMoneyAll(player);
-                player.sendMessage(CfgLang.lang.get(Lang.REMOVE_SUCCESS).replace("%money", amount+""));
+                sendMessage(player, CfgLang.lang.get(Lang.REMOVE_SUCCESS).replace("%money", amount+""));
                 return true;
             }
         }
@@ -66,14 +66,14 @@ public class BankCommand extends CommandUtil implements CommandExecutor {
                 if (!checkPerm(player, "bank.add")) return false;
                 if (!checkInt(player, args[1])) return false;
                 if (Integer.parseInt(args[1]) > VaultUtil.getBalance(player)){
-                    player.sendMessage(CfgLang.lang.get(Lang.ADD_FAILURE_NOT_ENOUGH));
+                    sendMessage(player, CfgLang.lang.get(Lang.ADD_FAILURE_NOT_ENOUGH));
                     return false;
                 }
                 if (!Bank.getPlayerManager().addMoney(player, Integer.parseInt(args[1]))){
-                    player.sendMessage(CfgLang.lang.get(Lang.ADD_FAILURE_TOO_MUCH).replace("%money", args[1]));
+                    sendMessage(player, CfgLang.lang.get(Lang.ADD_FAILURE_TOO_MUCH).replace("%money", args[1]));
                     return false;
                 }
-                player.sendMessage(CfgLang.lang.get(Lang.ADD_SUCCESS).replace("%money", args[1]));
+                sendMessage(player, CfgLang.lang.get(Lang.ADD_SUCCESS).replace("%money", args[1]));
                 return true;
             }
 
@@ -82,10 +82,10 @@ public class BankCommand extends CommandUtil implements CommandExecutor {
                 if (!checkPerm(player, "bank.remove")) return false;
                 if (!checkInt(player, args[1])) return false;
                 if (!Bank.getPlayerManager().removeMoney(player, Integer.parseInt(args[1]))){
-                    player.sendMessage(CfgLang.lang.get(Lang.REMOVE_FAILURE_TOO_MUCH).replace("%money", args[1]));
+                    sendMessage(player, CfgLang.lang.get(Lang.REMOVE_FAILURE_TOO_MUCH).replace("%money", args[1]));
                     return false;
                 }
-                player.sendMessage(CfgLang.lang.get(Lang.REMOVE_SUCCESS).replace("%money", args[1]));
+                sendMessage(player, CfgLang.lang.get(Lang.REMOVE_SUCCESS).replace("%money", args[1]));
                 return true;
             }
 
@@ -96,7 +96,7 @@ public class BankCommand extends CommandUtil implements CommandExecutor {
                 Player request = Bukkit.getPlayer(args[1]);
                 CorePlayer corePlayer = Bank.getPlayerManager().getCorePlayer(request.getUniqueId());
                 double amount = corePlayer.getAmount();
-                player.sendMessage(CfgLang.lang.get(Lang.SHOW_PLAYER).replace("%player", args[1]).replace("%amount", amount+""));
+                sendMessage(player, CfgLang.lang.get(Lang.SHOW_PLAYER).replace("%player", args[1]).replace("%amount", amount+""));
                 return true;
             }
         }

@@ -309,13 +309,13 @@ admin-help:
 deposit-message:
   - ""
   - "§e§lBANK"
-  - "§8» §fClick on this message to §eadd §fcustom amount of money to your account."
+  - "<click:suggest_command:'/bank add '>§8» §fClick on this message to §eadd §fcustom amount of money to your account.</click>"
   - ""
 
 withdraw-message:
   - ""
   - "§e§lBANK"
-  - "§8» §fClick on this message to §eremove §fcustom amount of money from your account."
+  - "<click:suggest_command:'/bank remove '>§8» §fClick on this message to §eremove §fcustom amount of money from your account.</click>"
   - ""
 
 lang:

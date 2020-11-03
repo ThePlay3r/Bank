@@ -4,14 +4,9 @@ import me.pljr.bank.commands.ABankCommand;
 import me.pljr.bank.commands.BankCommand;
 import me.pljr.bank.config.*;
 import me.pljr.bank.listeners.AsyncPlayerPreLoginListener;
-import me.pljr.bank.listeners.InventoryCloseListener;
 import me.pljr.bank.listeners.PlayerQuitListener;
 import me.pljr.bank.managers.PlayerManager;
 import me.pljr.bank.managers.QueryManager;
-import me.pljr.bank.menus.BanksMenu;
-import me.pljr.bank.menus.DepositMenu;
-import me.pljr.bank.menus.MainMenu;
-import me.pljr.bank.menus.WithdrawMenu;
 import me.pljr.pljrapi.PLJRApi;
 import me.pljr.pljrapi.database.DataSource;
 import me.pljr.pljrapi.managers.ConfigManager;
@@ -74,12 +69,6 @@ public final class Bank extends JavaPlugin {
     private void setupListeners(){
         getServer().getPluginManager().registerEvents(new AsyncPlayerPreLoginListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
-        getServer().getPluginManager().registerEvents(new InventoryCloseListener(), this);
-
-        getServer().getPluginManager().registerEvents(new MainMenu(), this);
-        getServer().getPluginManager().registerEvents(new DepositMenu(), this);
-        getServer().getPluginManager().registerEvents(new WithdrawMenu(), this);
-        getServer().getPluginManager().registerEvents(new BanksMenu(), this);
     }
 
     private void setupCommands(){

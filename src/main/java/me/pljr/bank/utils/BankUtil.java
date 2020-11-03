@@ -6,6 +6,7 @@ import me.pljr.bank.config.CfgLang;
 import me.pljr.bank.enums.BankType;
 import me.pljr.bank.enums.Lang;
 import me.pljr.bank.objects.CorePlayer;
+import me.pljr.pljrapi.utils.ChatUtil;
 import me.pljr.pljrapi.utils.VaultUtil;
 import org.bukkit.entity.Player;
 
@@ -30,13 +31,13 @@ public class BankUtil {
         double cost = getCost(bankType);
         double balance = VaultUtil.getBalance(player);
         if (balance < cost){
-            player.sendMessage(CfgLang.lang.get(Lang.BUY_FAILURE));
+            ChatUtil.sendMessage(player, CfgLang.lang.get(Lang.BUY_FAILURE));
             return;
         }
         CorePlayer corePlayer = Bank.getPlayerManager().getCorePlayer(uuid);
         corePlayer.setBankType(bankType);
         VaultUtil.withdraw(player, cost);
         Bank.getPlayerManager().setCorePlayer(uuid, corePlayer);
-        player.sendMessage(CfgLang.lang.get(Lang.BUY_SUCCESS));
+        ChatUtil.sendMessage(player, CfgLang.lang.get(Lang.BUY_SUCCESS));
     }
 }

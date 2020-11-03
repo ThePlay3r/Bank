@@ -35,9 +35,9 @@ public class ABankCommand extends CommandUtil implements CommandExecutor {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
                 Bank.getPlayerManager().removeMoneyAll(player);
                 Bank.getPlayerManager().addMoney(player, amount);
-                sender.sendMessage(CfgLang.lang.get(Lang.ADMIN_SET_SUCCESS).replace("%player", args[1]).replace("%money", amount+""));
+                sendMessage(sender, CfgLang.lang.get(Lang.ADMIN_SET_SUCCESS).replace("%player", args[1]).replace("%money", amount+""));
                 if (player.isOnline()){
-                    ((Player)player).sendMessage(CfgLang.lang.get(Lang.ADMIN_SET_SUCCESS_NOTIFY).replace("%money", args[2]).replace("%player", sender.getName()));
+                    sendMessage((Player)player, CfgLang.lang.get(Lang.ADMIN_SET_SUCCESS_NOTIFY).replace("%money", args[2]).replace("%player", sender.getName()));
                 }
                 return true;
             }
@@ -49,9 +49,9 @@ public class ABankCommand extends CommandUtil implements CommandExecutor {
                 double amount = Integer.parseInt(args[2]);
                 OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
                 Bank.getPlayerManager().addMoney(player, amount);
-                sender.sendMessage(CfgLang.lang.get(Lang.ADMIN_ADD_SUCCESS).replace("%player", args[1]).replace("%money", amount+""));
+                sendMessage(sender, CfgLang.lang.get(Lang.ADMIN_ADD_SUCCESS).replace("%player", args[1]).replace("%money", amount+""));
                 if (player.isOnline()){
-                    ((Player)player).sendMessage(CfgLang.lang.get(Lang.ADMIN_ADD_SUCCESS_NOTIFY).replace("%money", args[2]).replace("%player", sender.getName()));
+                    sendMessage((Player)player, CfgLang.lang.get(Lang.ADMIN_ADD_SUCCESS_NOTIFY).replace("%money", args[2]).replace("%player", sender.getName()));
                 }
                 return true;
             }
@@ -64,14 +64,14 @@ public class ABankCommand extends CommandUtil implements CommandExecutor {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
                 double playerAccount = Bank.getPlayerManager().getCorePlayer(player.getUniqueId()).getAmount();
                 if (amount>playerAccount){
-                    sender.sendMessage(CfgLang.lang.get(Lang.ADMIN_REMOVE_FAILURE_TOO_MUCH).replace("%player", args[1]));
+                    sendMessage(sender, CfgLang.lang.get(Lang.ADMIN_REMOVE_FAILURE_TOO_MUCH).replace("%player", args[1]));
                     return false;
                 }
                 Bank.getPlayerManager().removeMoneyAll(player);
                 Bank.getPlayerManager().addMoney(player, amount);
-                sender.sendMessage(CfgLang.lang.get(Lang.ADMIN_REMOVE_SUCCESS).replace("%player", args[1]).replace("%money", amount+""));
+                sendMessage(sender, CfgLang.lang.get(Lang.ADMIN_REMOVE_SUCCESS).replace("%player", args[1]).replace("%money", amount+""));
                 if (player.isOnline()){
-                    ((Player)player).sendMessage(CfgLang.lang.get(Lang.ADMIN_REMOVE_SUCCESS_NOTIFY).replace("%money", args[2]).replace("%player", sender.getName()));
+                    sendMessage((Player)player, CfgLang.lang.get(Lang.ADMIN_REMOVE_SUCCESS_NOTIFY).replace("%money", args[2]).replace("%player", sender.getName()));
                 }
                 return true;
             }

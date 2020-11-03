@@ -5,7 +5,7 @@ api-version: 1.13
 authors: [9hx]
 depend: [PLJRApi]
 softdepend: [PlaceholderAPI]
-description: Plugin for in-game Bank
+description: Plugin for in-game Banks.
 commands:
   bank:
     description: Main command for Banks.
