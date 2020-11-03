@@ -20,7 +20,7 @@ public class ABankCommand extends CommandUtil implements CommandExecutor {
         if (args.length == 1){
             // /abank help
             if (args[0].equalsIgnoreCase("help")){
-                if (!checkPerm(sender, "abanks.help")) return false;
+                if (!checkPerm(sender, "abank.help")) return false;
                 sendHelp(sender, CfgLang.adminHelp);
                 return true;
             }
@@ -29,7 +29,7 @@ public class ABankCommand extends CommandUtil implements CommandExecutor {
         else if (args.length == 3){
             // /abank set <player> <amount>
             if (args[0].equalsIgnoreCase("set")){
-                if (!checkPerm(sender, "abanks.set")) return false;
+                if (!checkPerm(sender, "abank.set")) return false;
                 if (!checkInt(sender, args[2])) return false;
                 double amount = Integer.parseInt(args[2]);
                 OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
@@ -44,7 +44,7 @@ public class ABankCommand extends CommandUtil implements CommandExecutor {
 
             // /abank add <player> <amount>
             if (args[0].equalsIgnoreCase("add")){
-                if (!checkPerm(sender, "abanks.add")) return false;
+                if (!checkPerm(sender, "abank.add")) return false;
                 if (!checkInt(sender, args[2])) return false;
                 double amount = Integer.parseInt(args[2]);
                 OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
@@ -58,7 +58,7 @@ public class ABankCommand extends CommandUtil implements CommandExecutor {
 
             // /abank remove <player> <amount>
             if (args[0].equalsIgnoreCase("remove")){
-                if (!checkPerm(sender, "abanks.remove")) return false;
+                if (!checkPerm(sender, "abank.remove")) return false;
                 if (!checkInt(sender, args[2])) return false;
                 double amount = Integer.parseInt(args[2]);
                 OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
@@ -77,7 +77,7 @@ public class ABankCommand extends CommandUtil implements CommandExecutor {
             }
         }
 
-        if (checkPerm(sender, "abanks.help")){
+        if (checkPerm(sender, "abank.help")){
             sendHelp(sender, CfgLang.adminHelp);
         }
         return false;
