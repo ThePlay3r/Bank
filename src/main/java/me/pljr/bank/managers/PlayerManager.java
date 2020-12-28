@@ -2,7 +2,6 @@ package me.pljr.bank.managers;
 
 import me.pljr.bank.Bank;
 import me.pljr.bank.objects.CorePlayer;
-import me.pljr.bank.utils.BankUtil;
 import me.pljr.pljrapispigot.utils.VaultUtil;
 import org.bukkit.OfflinePlayer;
 

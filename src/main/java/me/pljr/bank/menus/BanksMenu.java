@@ -1,8 +1,8 @@
 package me.pljr.bank.menus;
 
 import me.pljr.bank.Bank;
-import me.pljr.bank.config.CfgSettings;
 import me.pljr.bank.config.BankType;
+import me.pljr.bank.config.CfgSettings;
 import me.pljr.bank.config.Lang;
 import me.pljr.bank.objects.CorePlayer;
 import me.pljr.bank.utils.BankUtil;
@@ -12,6 +12,7 @@ import me.pljr.pljrapispigot.managers.GUIManager;
 import me.pljr.pljrapispigot.objects.GUI;
 import me.pljr.pljrapispigot.objects.GUIItem;
 import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 

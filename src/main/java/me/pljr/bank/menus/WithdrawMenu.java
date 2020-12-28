@@ -3,14 +3,12 @@ package me.pljr.bank.menus;
 import me.pljr.bank.config.CfgWithdrawMenu;
 import me.pljr.bank.config.Lang;
 import me.pljr.pljrapispigot.builders.GUIBuilder;
-import me.pljr.pljrapispigot.managers.GUIManager;
 import me.pljr.pljrapispigot.objects.GUI;
 import me.pljr.pljrapispigot.objects.GUIItem;
 import me.pljr.pljrapispigot.utils.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class WithdrawMenu implements Listener {
     public static GUI get(Player player){
