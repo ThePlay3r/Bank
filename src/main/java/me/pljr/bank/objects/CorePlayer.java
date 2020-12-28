@@ -1,6 +1,6 @@
 package me.pljr.bank.objects;
 
-import me.pljr.bank.enums.BankType;
+import me.pljr.bank.config.BankType;
 
 public class CorePlayer {
     private double amount;

@@ -7,9 +7,8 @@ import me.pljr.bank.listeners.AsyncPlayerPreLoginListener;
 import me.pljr.bank.listeners.PlayerQuitListener;
 import me.pljr.bank.managers.PlayerManager;
 import me.pljr.bank.managers.QueryManager;
-import me.pljr.pljrapi.PLJRApi;
-import me.pljr.pljrapi.database.DataSource;
-import me.pljr.pljrapi.managers.ConfigManager;
+import me.pljr.pljrapispigot.database.DataSource;
+import me.pljr.pljrapispigot.managers.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,7 +21,6 @@ public final class Bank extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        if (!setupPLJRApi()) return;
         instance = this;
         setupConfig();
         setupManagers();
@@ -32,25 +30,12 @@ public final class Bank extends JavaPlugin {
         setupPapi();
     }
 
-    private boolean setupPLJRApi(){
-        PLJRApi api = (PLJRApi) Bukkit.getServer().getPluginManager().getPlugin("PLJRApi");
-        if (api == null){
-            Bukkit.getConsoleSender().sendMessage("§cBank: PLJRApi not found, disabling plugin!");
-            getServer().getPluginManager().disablePlugin(this);
-            return false;
-        }else{
-            Bukkit.getConsoleSender().sendMessage("§aBank: Hooked into PLJRApi!");
-            return true;
-        }
-    }
-
     private void setupConfig(){
         saveDefaultConfig();
-        configManager = new ConfigManager(getConfig(), "§cBank:", "config.yml");
-        CfgBanks.load(configManager);
-        CfgBanksMenu.load(configManager);
+        configManager = new ConfigManager(this, "config.yml");
+        Lang.load(configManager);
+        BankType.load(configManager);
         CfgDepositMenu.load(configManager);
-        CfgLang.load(configManager);
         CfgMainMenu.load(configManager);
         CfgSettings.load(configManager);
         CfgWithdrawMenu.load(configManager);
@@ -72,8 +57,8 @@ public final class Bank extends JavaPlugin {
     }
 
     private void setupCommands(){
-        getCommand("bank").setExecutor(new BankCommand());
-        getCommand("abank").setExecutor(new ABankCommand());
+        new BankCommand().registerCommand(this);
+        new ABankCommand().registerCommand(this);
     }
 
     private void setupPapi(){

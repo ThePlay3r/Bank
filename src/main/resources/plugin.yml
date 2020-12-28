@@ -3,7 +3,7 @@ version: ${project.version}
 main: me.pljr.bank.Bank
 api-version: 1.13
 authors: [9hx]
-depend: [PLJRApi]
+depend: [PLJRApi-Spigot]
 softdepend: [PlaceholderAPI]
 description: Plugin for in-game Banks.
 commands:

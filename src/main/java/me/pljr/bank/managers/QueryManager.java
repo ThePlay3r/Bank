@@ -1,9 +1,9 @@
 package me.pljr.bank.managers;
 
 import me.pljr.bank.Bank;
-import me.pljr.bank.enums.BankType;
+import me.pljr.bank.config.BankType;
 import me.pljr.bank.objects.CorePlayer;
-import me.pljr.pljrapi.database.DataSource;
+import me.pljr.pljrapispigot.database.DataSource;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;

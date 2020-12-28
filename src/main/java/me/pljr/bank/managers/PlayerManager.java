@@ -3,7 +3,7 @@ package me.pljr.bank.managers;
 import me.pljr.bank.Bank;
 import me.pljr.bank.objects.CorePlayer;
 import me.pljr.bank.utils.BankUtil;
-import me.pljr.pljrapi.utils.VaultUtil;
+import me.pljr.pljrapispigot.utils.VaultUtil;
 import org.bukkit.OfflinePlayer;
 
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class PlayerManager {
         UUID uuid = player.getUniqueId();
         CorePlayer corePlayer = getCorePlayer(uuid);
         double bankBalance = corePlayer.getAmount();
-        if (bankBalance+amount > BankUtil.getMax(corePlayer.getBankType())){
+        if (bankBalance+amount > corePlayer.getBankType().getBank().getMax()){
             return false;
         }
         VaultUtil.withdraw(player, amount);
@@ -48,7 +48,7 @@ public class PlayerManager {
         CorePlayer corePlayer = getCorePlayer(uuid);
         double balance = VaultUtil.getBalance(player);
         double bankBalance = corePlayer.getAmount();
-        if (bankBalance+balance > BankUtil.getMax(corePlayer.getBankType())){
+        if (bankBalance+balance > corePlayer.getBankType().getBank().getMax()){
             return false;
         }
         VaultUtil.withdraw(player, balance);
