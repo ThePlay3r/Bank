@@ -33,12 +33,10 @@ public final class Bank extends JavaPlugin {
     private void setupConfig(){
         saveDefaultConfig();
         configManager = new ConfigManager(this, "config.yml");
-        Lang.load(configManager);
-        BankType.load(configManager);
-        CfgDepositMenu.load(configManager);
-        CfgMainMenu.load(configManager);
         CfgSettings.load(configManager);
-        CfgWithdrawMenu.load(configManager);
+        Lang.load(new ConfigManager(this, "lang.yml"));
+        BankType.load(new ConfigManager(this, "banktypes.yml"));
+        MenuItemType.load(new ConfigManager(this, "menus.yml"));
     }
 
     private void setupManagers(){

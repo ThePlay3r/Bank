@@ -20,7 +20,7 @@ public class ABankCommand extends CommandUtil {
             // /abank help
             if (args[0].equalsIgnoreCase("help")){
                 if (!checkPerm(player, "abank.help")) return;
-                sendMessage(player, Lang.ADMIN_HELP);
+                sendMessage(player, Lang.ADMIN_HELP.get());
                 return;
             }
         }
@@ -77,7 +77,7 @@ public class ABankCommand extends CommandUtil {
         }
 
         if (checkPerm(player, "abank.help")){
-            sendMessage(player, Lang.ADMIN_HELP);
+            sendMessage(player, Lang.ADMIN_HELP.get());
         }
     }
 
@@ -86,7 +86,7 @@ public class ABankCommand extends CommandUtil {
         if (args.length == 1){
             // /abank help
             if (args[0].equalsIgnoreCase("help")){
-                sendMessage(sender, Lang.ADMIN_HELP);
+                sendMessage(sender, Lang.ADMIN_HELP.get());
                 return;
             }
         }
@@ -139,6 +139,6 @@ public class ABankCommand extends CommandUtil {
             }
         }
 
-        sendMessage(sender, Lang.ADMIN_HELP);
+        sendMessage(sender, Lang.ADMIN_HELP.get());
     }
 }

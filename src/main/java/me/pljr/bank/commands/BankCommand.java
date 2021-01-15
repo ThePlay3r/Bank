@@ -27,7 +27,7 @@ public class BankCommand extends CommandUtil {
             // /bank help
             if (args[0].equalsIgnoreCase("help")){
                 if (!checkPerm(player, "bank.help")) return;
-                sendMessage(player, Lang.HELP);
+                sendMessage(player, Lang.HELP.get());
                 return;
             }
 
@@ -95,7 +95,7 @@ public class BankCommand extends CommandUtil {
         }
 
         if (checkPerm(player, "bank.help")){
-            sendMessage(player, Lang.HELP);
+            sendMessage(player, Lang.HELP.get());
         }
     }
 }

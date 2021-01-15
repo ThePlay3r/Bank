@@ -8,7 +8,7 @@ public class CorePlayer {
 
     public CorePlayer(){
         this.amount = 0;
-        this.bankType = BankType.ONE;
+        this.bankType = BankType.DEFAULT;
     }
 
     public CorePlayer(double amount, BankType bankType){

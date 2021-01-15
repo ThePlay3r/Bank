@@ -14,7 +14,7 @@ public class BankUtil {
 
     public static void buy(Player player, BankType bankType){
         UUID uuid = player.getUniqueId();
-        double cost = bankType.getBank().getCost();
+        double cost = bankType.getCost();
         double balance = VaultUtil.getBalance(player);
         if (balance < cost){
             ChatUtil.sendMessage(player, Lang.BUY_FAILURE.get());

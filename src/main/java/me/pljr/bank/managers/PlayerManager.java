@@ -33,7 +33,7 @@ public class PlayerManager {
         UUID uuid = player.getUniqueId();
         CorePlayer corePlayer = getCorePlayer(uuid);
         double bankBalance = corePlayer.getAmount();
-        if (bankBalance+amount > corePlayer.getBankType().getBank().getMax()){
+        if (bankBalance+amount > corePlayer.getBankType().getMaxDeposit()){
             return false;
         }
         VaultUtil.withdraw(player, amount);
@@ -47,7 +47,7 @@ public class PlayerManager {
         CorePlayer corePlayer = getCorePlayer(uuid);
         double balance = VaultUtil.getBalance(player);
         double bankBalance = corePlayer.getAmount();
-        if (bankBalance+balance > corePlayer.getBankType().getBank().getMax()){
+        if (bankBalance+balance > corePlayer.getBankType().getMaxDeposit()){
             return false;
         }
         VaultUtil.withdraw(player, balance);
