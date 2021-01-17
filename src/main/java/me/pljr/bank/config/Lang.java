@@ -69,7 +69,7 @@ public enum Lang {
             if (!fileConfig.isSet(lang.toString())){
                 fileConfig.set(lang.toString(), lang.getDefault());
             }
-            Lang.lang.put(lang, config.getString("lang."+lang));
+            Lang.lang.put(lang, config.getString(lang.toString()));
         }
         config.save();
     }
