@@ -1,17 +1,55 @@
 package me.pljr.bank.commands;
 
-import me.pljr.bank.Bank;
 import me.pljr.bank.config.Lang;
-import me.pljr.pljrapispigot.utils.CommandUtil;
+import me.pljr.bank.managers.PlayerManager;
+import me.pljr.pljrapispigot.commands.BukkitCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class ABankCommand extends CommandUtil {
+public class ABankCommand extends BukkitCommand {
 
-    public ABankCommand(){
+    private final PlayerManager playerManager;
+
+    public ABankCommand(PlayerManager playerManager){
         super("abank", "abank.use");
+        this.playerManager = playerManager;
+    }
+
+    private void executeSet(CommandSender sender, OfflinePlayer target, double amount){
+        playerManager.getPlayer(target, bankTarget -> {
+            bankTarget.removeMoneyAll();
+            if (!bankTarget.addMoney(amount)) bankTarget.addMoney(bankTarget.getBankType().getMaxDeposit());
+            sendMessage(sender, Lang.ADMIN_SET_SUCCESS.get().replace("{player}", target.getName()).replace("{money}", amount+""));
+            if (target.isOnline()){
+                sendMessage(target, Lang.ADMIN_SET_SUCCESS_NOTIFY.get().replace("{money}", amount+"").replace("{player}", sender.getName()));
+            }
+        });
+    }
+
+    private void executeAdd(CommandSender sender, OfflinePlayer target, double amount){
+        playerManager.getPlayer(target, bankTarget -> {
+            if (!bankTarget.addMoney(amount)) bankTarget.addMoney(bankTarget.getBankType().getMaxDeposit() - bankTarget.getAmount());
+            sendMessage(sender, Lang.ADMIN_ADD_SUCCESS.get().replace("{player}", target.getName()).replace("{money}", amount+""));
+            if (target.isOnline()){
+                sendMessage(target, Lang.ADMIN_ADD_SUCCESS_NOTIFY.get().replace("{money}", amount+"").replace("{player}", sender.getName()));
+            }
+        });
+    }
+
+    private void executeRemove(CommandSender sender, OfflinePlayer target, double amount){
+        playerManager.getPlayer(target, bankTarget -> {
+            if (!bankTarget.removeMoney(amount)){
+                sendMessage(sender,Lang.ADMIN_REMOVE_FAILURE_TOO_MUCH.get().replace("{player}", target.getName()));
+                return;
+            }
+            sendMessage(sender, Lang.ADMIN_REMOVE_SUCCESS.get().replace("{player}", target.getName()).replace("{money}", amount+""));
+            if (target.isOnline()){
+                sendMessage((Player)target, Lang.ADMIN_REMOVE_SUCCESS_NOTIFY.get().replace("{money}", amount+"").replace("{player}", sender.getName()));
+            }
+        });
     }
 
     @Override
@@ -32,12 +70,7 @@ public class ABankCommand extends CommandUtil {
                 if (!checkInt(player, args[2])) return;
                 double amount = Integer.parseInt(args[2]);
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
-                Bank.getPlayerManager().removeMoneyAll(target);
-                Bank.getPlayerManager().addMoney(target, amount);
-                sendMessage(player, Lang.ADMIN_SET_SUCCESS.get().replace("{player}", args[1]).replace("{money}", amount+""));
-                if (target.isOnline()){
-                    sendMessage((Player)target, Lang.ADMIN_SET_SUCCESS_NOTIFY.get().replace("{money}", args[2]).replace("{player}", player.getName()));
-                }
+                executeSet(player, target, amount);
                 return;
             }
 
@@ -47,11 +80,7 @@ public class ABankCommand extends CommandUtil {
                 if (!checkInt(player, args[2])) return;
                 double amount = Integer.parseInt(args[2]);
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
-                Bank.getPlayerManager().addMoney(target, amount);
-                sendMessage(player, Lang.ADMIN_ADD_SUCCESS.get().replace("{player}", args[1]).replace("{money}", amount+""));
-                if (target.isOnline()){
-                    sendMessage((Player)target, Lang.ADMIN_ADD_SUCCESS_NOTIFY.get().replace("{money}", args[2]).replace("{player}", player.getName()));
-                }
+                executeAdd(player, target, amount);
                 return;
             }
 
@@ -61,17 +90,7 @@ public class ABankCommand extends CommandUtil {
                 if (!checkInt(player, args[2])) return;
                 double amount = Integer.parseInt(args[2]);
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
-                double playerAccount = Bank.getPlayerManager().getCorePlayer(target.getUniqueId()).getAmount();
-                if (amount>playerAccount){
-                    sendMessage(player, Lang.ADMIN_REMOVE_FAILURE_TOO_MUCH.get().replace("{player}", args[1]));
-                    return;
-                }
-                Bank.getPlayerManager().removeMoneyAll(target);
-                Bank.getPlayerManager().addMoney(target, amount);
-                sendMessage(player, Lang.ADMIN_REMOVE_SUCCESS.get().replace("{player}", args[1]).replace("{money}", amount+""));
-                if (target.isOnline()){
-                    sendMessage((Player)target, Lang.ADMIN_REMOVE_SUCCESS_NOTIFY.get().replace("{money}", args[2]).replace("{player}", player.getName()));
-                }
+                executeRemove(player, target, amount);
                 return;
             }
         }
@@ -97,12 +116,7 @@ public class ABankCommand extends CommandUtil {
                 if (!checkInt(sender, args[2])) return;
                 double amount = Integer.parseInt(args[2]);
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
-                Bank.getPlayerManager().removeMoneyAll(target);
-                Bank.getPlayerManager().addMoney(target, amount);
-                sendMessage(sender, Lang.ADMIN_SET_SUCCESS.get().replace("{player}", args[1]).replace("{money}", amount+""));
-                if (target.isOnline()){
-                    sendMessage((Player)target, Lang.ADMIN_SET_SUCCESS_NOTIFY.get().replace("{money}", args[2]).replace("{player}", sender.getName()));
-                }
+                executeSet(sender, target, amount);
                 return;
             }
 
@@ -111,11 +125,7 @@ public class ABankCommand extends CommandUtil {
                 if (!checkInt(sender, args[2])) return;
                 double amount = Integer.parseInt(args[2]);
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
-                Bank.getPlayerManager().addMoney(target, amount);
-                sendMessage(sender, Lang.ADMIN_ADD_SUCCESS.get().replace("{player}", args[1]).replace("{money}", amount+""));
-                if (target.isOnline()){
-                    sendMessage((Player)target, Lang.ADMIN_ADD_SUCCESS_NOTIFY.get().replace("{money}", args[2]).replace("{player}", sender.getName()));
-                }
+                executeAdd(sender, target, amount);
                 return;
             }
 
@@ -124,17 +134,7 @@ public class ABankCommand extends CommandUtil {
                 if (!checkInt(sender, args[2])) return;
                 double amount = Integer.parseInt(args[2]);
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
-                double playerAccount = Bank.getPlayerManager().getCorePlayer(target.getUniqueId()).getAmount();
-                if (amount>playerAccount){
-                    sendMessage(sender,Lang.ADMIN_REMOVE_FAILURE_TOO_MUCH.get().replace("{player}", args[1]));
-                    return;
-                }
-                Bank.getPlayerManager().removeMoneyAll(target);
-                Bank.getPlayerManager().addMoney(target, amount);
-                sendMessage(sender, Lang.ADMIN_REMOVE_SUCCESS.get().replace("{player}", args[1]).replace("{money}", amount+""));
-                if (target.isOnline()){
-                    sendMessage((Player)target, Lang.ADMIN_REMOVE_SUCCESS_NOTIFY.get().replace("{money}", args[2]).replace("{player}", sender.getName()));
-                }
+                executeRemove(sender, target, amount);
                 return;
             }
         }

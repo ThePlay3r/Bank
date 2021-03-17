@@ -1,10 +1,8 @@
 package me.pljr.bank.managers;
 
-import me.pljr.bank.Bank;
 import me.pljr.bank.config.BankType;
-import me.pljr.bank.objects.CorePlayer;
+import me.pljr.bank.objects.BankPlayer;
 import me.pljr.pljrapispigot.database.DataSource;
-import org.bukkit.Bukkit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +17,7 @@ public class QueryManager {
         this.dataSource = dataSource;
     }
 
-    public void loadPlayerSync(UUID uuid){
+    public BankPlayer loadPlayer(UUID uuid){
         try {
             Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -28,37 +26,34 @@ public class QueryManager {
             preparedStatement.setString(1, uuid.toString());
             ResultSet results = preparedStatement.executeQuery();
             if (results.next()){
-                Bank.getPlayerManager().setCorePlayer(uuid, new CorePlayer(
+                dataSource.close(connection, preparedStatement, results);
+                return new BankPlayer(
+                        uuid,
                         results.getDouble("amount"),
                         BankType.valueOf(results.getString("tier"))
-                ));
-            }else{
-                Bank.getPlayerManager().setCorePlayer(uuid, new CorePlayer());
+                );
             }
             dataSource.close(connection, preparedStatement, results);
         }catch (SQLException e){
             e.printStackTrace();
         }
+        return new BankPlayer(uuid);
     }
 
-    public void savePlayer(UUID uuid){
-        Bukkit.getScheduler().runTaskAsynchronously(Bank.getInstance(), ()->{
-           try {
-               CorePlayer corePlayer = Bank.getPlayerManager().getCorePlayer(uuid);
-
-               Connection connection = dataSource.getConnection();
-               PreparedStatement preparedStatement = connection.prepareStatement(
+    public void savePlayer(BankPlayer bankPlayer){
+        try {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
                     "REPLACE INTO bank_players VALUES (?,?,?)"
-               );
-               preparedStatement.setString(1, uuid.toString());
-               preparedStatement.setDouble(2, corePlayer.getAmount());
-               preparedStatement.setString(3, corePlayer.getBankType().toString());
-               preparedStatement.executeUpdate();
-               dataSource.close(connection, preparedStatement, null);
-           }catch (SQLException e){
-               e.printStackTrace();
-           }
-        });
+            );
+            preparedStatement.setString(1, bankPlayer.getUniqueId().toString());
+            preparedStatement.setDouble(2, bankPlayer.getAmount());
+            preparedStatement.setString(3, bankPlayer.getBankType().toString());
+            preparedStatement.executeUpdate();
+            dataSource.close(connection, preparedStatement, null);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public void setupTables(){

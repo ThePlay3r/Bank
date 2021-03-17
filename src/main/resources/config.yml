@@ -30,4 +30,5 @@ mysql:
                  #############################################################  \
 settings:
   banks-menu-change-current: true #-> Should we change the current tier of bank to player's head?
+  cache-players: true # Should we save player data in memory? (false = loading on each join)
 #|--------------------------------------------------------------------------------------------------------------------|#

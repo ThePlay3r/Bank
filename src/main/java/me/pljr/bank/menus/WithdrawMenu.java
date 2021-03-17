@@ -1,5 +1,6 @@
 package me.pljr.bank.menus;
 
+import lombok.Getter;
 import me.pljr.bank.config.Lang;
 import me.pljr.bank.config.MenuItemType;
 import me.pljr.pljrapispigot.builders.GUIBuilder;
@@ -8,11 +9,14 @@ import me.pljr.pljrapispigot.objects.GUIItem;
 import me.pljr.pljrapispigot.utils.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
-public class WithdrawMenu implements Listener {
-    public static GUI get(Player player){
-        GUIBuilder guiBuilder = new GUIBuilder(Lang.MENU_TITLE.get(), 3).openOnClose(MainMenu.get(player));
+public class WithdrawMenu {
+
+    @Getter
+    private final GUI gui;
+
+    public WithdrawMenu(Player player, MainMenu mainMenu){
+        GUIBuilder guiBuilder = new GUIBuilder(Lang.MENU_TITLE.get(), 3).openOnClose(mainMenu.getGui());
 
         for (int i = 0;i<27;i++){
             guiBuilder.setItem(i, MenuItemType.WITHDRAW_BACKGROUND.get());
@@ -32,6 +36,6 @@ public class WithdrawMenu implements Listener {
                     player.closeInventory();
                 }));
 
-        return guiBuilder.create();
+        gui = guiBuilder.create();
     }
 }

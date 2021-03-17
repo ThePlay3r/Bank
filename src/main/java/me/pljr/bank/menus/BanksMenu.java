@@ -1,12 +1,13 @@
 package me.pljr.bank.menus;
 
+import lombok.Getter;
 import me.pljr.bank.Bank;
 import me.pljr.bank.config.BankType;
-import me.pljr.bank.config.CfgSettings;
 import me.pljr.bank.config.Lang;
 import me.pljr.bank.config.MenuItemType;
-import me.pljr.bank.objects.CorePlayer;
-import me.pljr.bank.utils.BankUtil;
+import me.pljr.bank.config.Settings;
+import me.pljr.bank.managers.PlayerManager;
+import me.pljr.bank.objects.BankPlayer;
 import me.pljr.pljrapispigot.builders.GUIBuilder;
 import me.pljr.pljrapispigot.builders.ItemBuilder;
 import me.pljr.pljrapispigot.managers.GUIManager;
@@ -18,53 +19,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BanksMenu {
-    public static GUI get(Player player){
-        GUIBuilder guiBuilder = new GUIBuilder(Lang.MENU_TITLE.get(), 3).openOnClose(MainMenu.get(player));
+    private final static Settings SETTINGS = Bank.get().getSettings();
+
+    @Getter
+    private final GUI gui;
+
+    public BanksMenu(BankPlayer bankPlayer, PlayerManager playerManager, MainMenu mainMenu){
+        Player player = bankPlayer.getPlayer();
+        GUIBuilder guiBuilder = new GUIBuilder(Lang.MENU_TITLE.get(), 3).openOnClose(mainMenu.getGui());
 
         for (int i = 0; i<27; i++){
             guiBuilder.setItem(i, MenuItemType.BANKS_BACKGROUND.get());
         }
         int i = 9;
 
-        BankType bankType = Bank.getPlayerManager().getCorePlayer(player.getUniqueId()).getBankType();
+        BankType bankType = bankPlayer.getBankType();
         for (BankType type : BankType.values()){
             GUIManager.ClickRunnable clickRunnable = run -> {};
-            List<BankType> available = getAvailable(player);
+            List<BankType> available = getAvailable(bankPlayer);
             switch (i){
                 case 11:
                     if (available.contains(BankType.TWO) && player.hasPermission(BankType.TWO.getPerm())){
-                        clickRunnable = run -> {
-                            BankUtil.buy(player, BankType.TWO);
-                            get(player).open(player);
+                        clickRunnable = click -> {
+                            playerManager.buyBank(player, BankType.TWO);
+                            player.closeInventory();
                         };
                     }
                     break;
                 case 13:
                     if (available.contains(BankType.THREE) && player.hasPermission(BankType.THREE.getPerm())){
-                        clickRunnable = run -> {
-                            BankUtil.buy(player, BankType.THREE);
-                            get(player).open(player);
+                        clickRunnable = click -> {
+                            playerManager.buyBank(player, BankType.THREE);
+                            player.closeInventory();
                         };
                     }
                     break;
                 case 15:
                     if (available.contains(BankType.FOUR) && player.hasPermission(BankType.FOUR.getPerm())){
-                        clickRunnable = run -> {
-                            BankUtil.buy(player, BankType.FOUR);
-                            get(player).open(player);
+                        clickRunnable = click -> {
+                            playerManager.buyBank(player, BankType.FOUR);
+                            player.closeInventory();
                         };
                     }
                     break;
                 case 17:
                     if (available.contains(BankType.FIVE) && player.hasPermission(BankType.FIVE.getPerm())){
-                        clickRunnable = run -> {
-                            BankUtil.buy(player, BankType.FIVE);
-                            get(player).open(player);
+                        clickRunnable = click -> {
+                            playerManager.buyBank(player, BankType.FIVE);
+                            player.closeInventory();
                         };
                     }
                     break;
             }
-            if (CfgSettings.BANKS_MENU_CHANGE_CURRENT){
+            if (SETTINGS.isBanksMenuChangeCurrent()){
                 if (type.equals(bankType)){
                     String playerName = player.getName();
                     guiBuilder.setItem(i, new GUIItem(
@@ -102,13 +109,12 @@ public class BanksMenu {
             i+=2;
         }
 
-        return guiBuilder.create();
+        gui = guiBuilder.create();
     }
 
-    private static List<BankType> getAvailable(Player player){
-        CorePlayer corePlayer = Bank.getPlayerManager().getCorePlayer(player.getUniqueId());
+    private List<BankType> getAvailable(BankPlayer bankPlayer){
         List<BankType> available = new ArrayList<>();
-        switch (corePlayer.getBankType()){
+        switch (bankPlayer.getBankType()){
             case DEFAULT:
                 available.add(BankType.TWO);
                 available.add(BankType.THREE);

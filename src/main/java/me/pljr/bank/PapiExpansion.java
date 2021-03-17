@@ -1,7 +1,8 @@
 package me.pljr.bank;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.pljr.bank.objects.CorePlayer;
+import me.pljr.bank.managers.PlayerManager;
+import me.pljr.bank.objects.BankPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -12,7 +13,8 @@ import java.util.UUID;
  */
 public class PapiExpansion extends PlaceholderExpansion {
 
-    private Bank plugin;
+    private final Bank plugin;
+    private final PlayerManager playerManager;
 
     /**
      * Since we register the expansion inside our own plugin, we
@@ -22,8 +24,9 @@ public class PapiExpansion extends PlaceholderExpansion {
      * @param plugin
      *        The instance of our plugin.
      */
-    public PapiExpansion(Bank plugin){
+    public PapiExpansion(Bank plugin, PlayerManager playerManager){
         this.plugin = plugin;
+        this.playerManager = playerManager;
     }
 
     /**
@@ -107,15 +110,12 @@ public class PapiExpansion extends PlaceholderExpansion {
         }
 
         UUID playerId = player.getUniqueId();
-        CorePlayer corePlayer = Bank.getPlayerManager().getCorePlayer(playerId);
+        BankPlayer bankPlayer = playerManager.getPlayerSync(playerId);
 
-        // %bank_value%
         if(identifier.equals("value")){
-            return corePlayer.getAmount()+"";
+            return bankPlayer.getAmount()+"";
         }
 
-        // We return null if an invalid placeholder (f.e. %someplugin_placeholder3%)
-        // was provided
         return null;
     }
 }

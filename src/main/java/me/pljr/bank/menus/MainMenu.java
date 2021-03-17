@@ -1,21 +1,25 @@
 package me.pljr.bank.menus;
 
-import me.pljr.bank.Bank;
+import lombok.Getter;
 import me.pljr.bank.config.Lang;
 import me.pljr.bank.config.MenuItemType;
-import me.pljr.bank.objects.CorePlayer;
+import me.pljr.bank.managers.PlayerManager;
+import me.pljr.bank.objects.BankPlayer;
 import me.pljr.pljrapispigot.builders.GUIBuilder;
 import me.pljr.pljrapispigot.builders.ItemBuilder;
 import me.pljr.pljrapispigot.objects.GUI;
 import me.pljr.pljrapispigot.objects.GUIItem;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
-public class MainMenu implements Listener {
-    public static GUI get(Player player){
-        CorePlayer corePlayer = Bank.getPlayerManager().getCorePlayer(player.getUniqueId());
-        double amount = corePlayer.getAmount();
-        int maxAmount = corePlayer.getBankType().getMaxDeposit();
+public class MainMenu {
+
+    @Getter
+    private final GUI gui;
+
+    public MainMenu(BankPlayer bankPlayer, PlayerManager playerManager){
+        Player player = bankPlayer.getPlayer();
+        double amount = bankPlayer.getAmount();
+        int maxAmount = bankPlayer.getBankType().getMaxDeposit();
 
         GUIBuilder guiBuilder = new GUIBuilder(Lang.MENU_TITLE.get(), 3);
         for (int i = 0; i<27;i++){
@@ -26,10 +30,10 @@ public class MainMenu implements Listener {
                         .replaceLore("{amount}", amount + "")
                         .replaceLore("{max}", maxAmount + "")
                         .create(),
-                inventoryClickEvent -> BanksMenu.get(player).open(player)));
-        guiBuilder.setItem(11, new GUIItem(MenuItemType.MAIN_DEPOSIT.get(), run -> DepositMenu.get(player).open(player)));
-        guiBuilder.setItem(15, new GUIItem(MenuItemType.MAIN_WITHDRAW.get(), run -> WithdrawMenu.get(player).open(player)));
+                inventoryClickEvent -> new BanksMenu(bankPlayer, playerManager, this).getGui().open(player)));
+        guiBuilder.setItem(11, new GUIItem(MenuItemType.MAIN_DEPOSIT.get(), run -> new DepositMenu(player, this).getGui().open(player)));
+        guiBuilder.setItem(15, new GUIItem(MenuItemType.MAIN_WITHDRAW.get(), run -> new WithdrawMenu(player, this).getGui().open(player)));
 
-        return guiBuilder.create();
+        gui = guiBuilder.create();
     }
 }
