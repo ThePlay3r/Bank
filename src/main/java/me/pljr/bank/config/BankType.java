@@ -40,7 +40,6 @@ public enum BankType {
         for (BankType type : values()){
             if (!fileConfig.isSet(type.toString())){
                 config.setSimpleItemStack(type.toString()+".menu-item", type.defaultMenuItem);
-                System.out.println(type.defaultMenuItem);
                 fileConfig.set(type.toString()+".max-deposit", type.defaultMaxDeposit);
                 fileConfig.set(type.toString()+".cost", type.defaultCost);
                 fileConfig.set(type.toString()+".perm", type.defaultPerm);
