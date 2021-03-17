@@ -18,6 +18,7 @@ public class QueryManager {
     }
 
     public BankPlayer loadPlayer(UUID uuid){
+        BankPlayer bankPlayer = new BankPlayer(uuid);
         try {
             Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -26,8 +27,7 @@ public class QueryManager {
             preparedStatement.setString(1, uuid.toString());
             ResultSet results = preparedStatement.executeQuery();
             if (results.next()){
-                dataSource.close(connection, preparedStatement, results);
-                return new BankPlayer(
+                bankPlayer = new BankPlayer(
                         uuid,
                         results.getDouble("amount"),
                         BankType.valueOf(results.getString("tier"))
@@ -37,7 +37,7 @@ public class QueryManager {
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return new BankPlayer(uuid);
+        return bankPlayer;
     }
 
     public void savePlayer(BankPlayer bankPlayer){
