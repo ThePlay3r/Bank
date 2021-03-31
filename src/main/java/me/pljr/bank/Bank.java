@@ -76,6 +76,7 @@ public final class Bank extends JavaPlugin {
 
     private void setupManagers(){
         playerManager = new PlayerManager(this, queryManager, settings.isCachePlayers());
+        playerManager.initAutoSave();
     }
 
     private void setupListeners(){
