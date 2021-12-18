@@ -4,7 +4,7 @@ Spigot plugin for in-game Banks.
 ----
 
 ## 🔧 Dependencies
-- PLJRApi: https://www.github.com/ThePlay3r/ServerCore
+- PLJRApi: https://www.github.com/ThePlay3r/PLJRApi-Spigot
 - Vault: https://www.spigotmc.org/resources/vault.34315/
 - PlaceholderAPI (Optional): https://www.spigotmc.org/resources/placeholderapi.6245/
 
